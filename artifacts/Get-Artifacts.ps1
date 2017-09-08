@@ -45,6 +45,7 @@ $EstablishedServices = [System.Collections.ArrayList]@()
 $DNSCache = [System.Collections.ArrayList]@()
 $Downloads = [System.Collections.ArrayList]@()
 $Documents = [System.Collections.ArrayList]@()
+$DriverList = [System.Collections.ArrayList]@()
 
 
 ## The function collectData is used to collect information from a single 
@@ -406,6 +407,7 @@ function writeData {
     Write-Host ($DNSCache | Format-Table | Out-String)
     Write-Host ($Downloads | Format-Table | Out-String)
     Write-Host ($Documents | Format-Table | Out-String)
+    Write-Host ($DriverList | Format-Table | Out-String)
 
     ## I originally tried using Write-Output but as it turns out
     ## when you call Write-Output on objects with different properties
@@ -448,6 +450,7 @@ function writeCSV {
     $DNSCache | Export-CSV -Path $path\dnscache.csv -NoTypeInformation
     $Downloads | Export-CSV -Path $path\downloads.csv -NoTypeInformation
     $Documents | Export-CSV -Path $path\documents.csv -NoTypeInformation
+    $DriverList | Export-CSV -Path $path\documents.csv -NoTypeInformation
 
     $finalpath = $path + "\" + $DomainInfo.Hostname + ".csv"
 
@@ -476,7 +479,7 @@ if ($TargetList) {
     $computers | ForEach {
 
         $computer = $_
-        Enter-PSSession -ComputerName $_ ## -Credential (Get-Credential)
+        Enter-PSSession -ComputerName $_ -Credential (Get-Credential)
         collectData
         Exit-PSSession
         if ($Print -eq $true) {
@@ -489,7 +492,7 @@ if ($TargetList) {
 
 } elseif ($Target) {
 
-    Enter-PSSession -ComputerName $Target ## -Credential (Get-Credential)
+    Enter-PSSession -ComputerName $Target -Credential (Get-Credential)
     collectData
     Exit-PSSession
     if ($Print -eq $true) {
