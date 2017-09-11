@@ -73,6 +73,7 @@ I see this as the first draft of an ongoing project so I intend to make several 
 - Switch to using only CIM-Sessions for running commands remotely
 - Research methods to improve the speed of the program and have it running as quickly as possible
 - Add titles to the top of each table of information in the outputted CSV file 
+- Add the capability to send emails with CSV file attached
 
 ### Author
 
